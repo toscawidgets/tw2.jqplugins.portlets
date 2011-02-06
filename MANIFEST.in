@@ -1,0 +1,3 @@
+recursive-include tw2/jqplugins/portlets/static *
+recursive-include tw2/jqplugins/portlets/templates *
+include README.rst
