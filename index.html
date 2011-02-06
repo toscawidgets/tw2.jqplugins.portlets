@@ -1,0 +1,185 @@
+<html>
+<head>
+<SCRIPT type="text/javascript" src="js/jquery.js"></SCRIPT>
+<SCRIPT type="text/javascript" src="js/jquery.cookie.js"></SCRIPT>
+<SCRIPT type="text/javascript" src="js/jquery-ui-1.8.2.custom.min.js"></SCRIPT>
+<link type="text/css" href="css/smoothness/jquery-ui-1.8.2.custom.css" rel="Stylesheet" />
+<style type="text/css" media="screen">
+    .column { width: 400px; float: left; padding-bottom: 200px; }
+    .tablecolumn { width: 600px; float: left; padding-bottom: 200px; }
+    .portlet { margin: 0 1em 1em 0; }
+    .portlet-header {
+        font-size:13px; margin: 0.3em;
+        padding-bottom: 4px; padding-left: 0.2em; }
+    .portlet-header .ui-icon { float: right; }
+    .portlet-content { padding: 0.4em; }
+    .ui-sortable-placeholder {
+        border: 1px dotted black;
+        visibility: visible !important;
+        height: 200px !important; }
+    .ui-sortable-placeholder * { visibility: hidden; }
+
+    body { font: 62.5% "Trebuchet MS", sans-serif; }
+</style>
+
+<script type="text/javascript">
+
+String.prototype.format = function() {
+    var formatted = this;
+    for(arg in arguments) {
+        formatted = formatted.replace("{" + arg + "}", arguments[arg]);
+    }
+    return formatted;
+};
+
+function createPorlet(id, title, content, column) {
+  var template = "<div class='portlet' id='{0}'><div class='portlet-header'>{1}</div><div class='portlet-content'>{2}</div></div>";
+  var target = template.format(id, title, content);
+  $('#' + column).append(target);
+    $("#" + id)
+        .addClass("ui-widget ui-widget-content")
+        .addClass("ui-helper-clearfix ui-corner-all")
+        .find(".portlet-header")
+        .addClass("ui-widget-header ui-corner-all")
+        .prepend('<span class="ui-icon ui-icon-minus"></span>')
+        .end()
+        .find(".portlet-content");
+    $("#" + id + " .portlet-header .ui-icon").click(function() {
+        $(this).toggleClass("ui-icon-minus");
+        $(this).toggleClass("ui-icon-plus");
+        $(this).parents(".portlet:first").find(".portlet-content").toggle();
+        saveOrder(); // This is important
+    });
+    $("#" + id + " .portlet-header .ui-icon").hover(
+        function() {$(this).addClass("ui-icon-hover"); },
+        function() {$(this).removeClass('ui-icon-hover'); }
+    );
+
+
+}
+// function that writes the list order to a cookie
+function saveOrder() {
+    $(".column").each(function(index, value){
+        var colid = value.id;
+        var cookieName = "cookie-" + colid;
+        // Get the order for this column.
+        var order = $('#' + colid).sortable("toArray");
+        // For each portlet in the column
+        for ( var i = 0, n = order.length; i < n; i++ ) {
+            // Determine if it is 'opened' or 'closed'
+            var v = $('#' + order[i] ).find('.portlet-content').is(':visible');
+            // Modify the array we're saving to indicate what's open and
+            //  what's not.
+            order[i] = order[i] + ":" + v;
+        }
+        $.cookie(cookieName, order, { path: "/", expiry: new Date(2012, 1, 1)});
+    });
+}
+
+// function that restores the list order from a cookie
+function restoreOrder() {
+    $(".column").each(function(index, value) {
+        var colid = value.id;
+        var cookieName = "cookie-" + colid
+        var cookie = $.cookie(cookieName);
+        if ( cookie == null ) { return; }
+        var IDs = cookie.split(",");
+        for (var i = 0, n = IDs.length; i < n; i++ ) {
+            var toks = IDs[i].split(":");
+            if ( toks.length != 2 ) {
+                continue;
+            }
+            var portletID = toks[0];
+            var visible = toks[1]
+            var portlet = $(".column")
+                .find('#' + portletID)
+                .appendTo($('#' + colid));
+            if (visible === 'false') {
+                portlet.find(".ui-icon").toggleClass("ui-icon-minus");
+                portlet.find(".ui-icon").toggleClass("ui-icon-plus");
+                portlet.find(".portlet-content").hide();
+            }
+        }
+    });
+} 
+
+
+$(document).ready( function () {
+    $(".column").sortable({
+        connectWith: ['.column'],
+        stop: function() { saveOrder(); }
+    }); 
+
+    $(".portlet")
+        .addClass("ui-widget ui-widget-content")
+        .addClass("ui-helper-clearfix ui-corner-all")
+        .find(".portlet-header")
+        .addClass("ui-widget-header ui-corner-all")
+        .prepend('<span class="ui-icon ui-icon-minus"></span>')
+        .end()
+        .find(".portlet-content");
+
+    restoreOrder();
+
+    $(".portlet-header .ui-icon").click(function() {
+        $(this).toggleClass("ui-icon-minus");
+        $(this).toggleClass("ui-icon-plus");
+        $(this).parents(".portlet:first").find(".portlet-content").toggle();
+        saveOrder(); // This is important
+    });
+    $(".portlet-header .ui-icon").hover(
+        function() {$(this).addClass("ui-icon-hover"); },
+        function() {$(this).removeClass('ui-icon-hover'); }
+    );
+}); 
+
+</script>
+</head>
+
+<body>
+    <div class="ui-widget">
+        <div class="ui-widget-header">
+            Saving Multiple Portlet Columns and Portlet State with Cookies
+        </div>
+        <div class="ui-content">
+            Try moving the portlets around and minimizing them, then reload the page to test restoration-by-cookie.
+        </div>
+    </div>
+<div class="column" id="col1">
+    <div class="portlet" id="box_feeds">
+        <div class="portlet-header">Feeds</div>
+        <div class="portlet-content">
+            Lorem ipsum dolor sit amet, consectetuer adipiscing elit
+        </div>
+    </div>
+    <div class="portlet" id="box_news">
+        <div class="portlet-header">News</div>
+        <div class="portlet-content">
+            Lorem ipsum dolor sit amet, consectetuer adipiscing elit
+        </div>
+    </div>
+</div>
+<div class="column" id="col2">
+    <div class="portlet" id="box_shopping">
+        <div class="portlet-header">Shopping</div>
+        <div class="portlet-content">
+            Lorem ipsum dolor sit amet, consectetuer adipiscing elit
+        </div>
+    </div>
+</div>
+<div class="column" id="col3">
+    <div class="portlet" id="box_links">
+        <div class="portlet-header">Links</div>
+        <div class="portlet-content">
+            Lorem ipsum dolor sit amet, consectetuer adipiscing elit
+        </div>
+    </div>
+    <div class="portlet" id="box_images">
+        <div class="portlet-header">Images</div>
+        <div class="portlet-content">
+            Lorem ipsum dolor sit amet, consectetuer adipiscing elit
+        </div>
+    </div>
+</div> 
+</body>
+</html>
