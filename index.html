@@ -32,7 +32,7 @@ String.prototype.format = function() {
     return formatted;
 };
 
-function createPorlet(id, title, content, column) {
+function createPortlet(id, title, content, column) {
   var template = "<div class='portlet' id='{0}'><div class='portlet-header'>{1}</div><div class='portlet-content'>{2}</div></div>";
   var target = template.format(id, title, content);
   $('#' + column).append(target);
@@ -109,28 +109,11 @@ $(document).ready( function () {
         connectWith: ['.column'],
         stop: function() { saveOrder(); }
     }); 
-
-    $(".portlet")
-        .addClass("ui-widget ui-widget-content")
-        .addClass("ui-helper-clearfix ui-corner-all")
-        .find(".portlet-header")
-        .addClass("ui-widget-header ui-corner-all")
-        .prepend('<span class="ui-icon ui-icon-minus"></span>')
-        .end()
-        .find(".portlet-content");
-
+    var content = "Lorem ipsum dolor sit amet, consectetuer adipiscing elit";
+    for (var i=0; i < 7; i++) {
+      createPortlet('fooid' + i, 'Portlet number ' + i, content, 'col'+(i%2));
+    }
     restoreOrder();
-
-    $(".portlet-header .ui-icon").click(function() {
-        $(this).toggleClass("ui-icon-minus");
-        $(this).toggleClass("ui-icon-plus");
-        $(this).parents(".portlet:first").find(".portlet-content").toggle();
-        saveOrder(); // This is important
-    });
-    $(".portlet-header .ui-icon").hover(
-        function() {$(this).addClass("ui-icon-hover"); },
-        function() {$(this).removeClass('ui-icon-hover'); }
-    );
 }); 
 
 </script>
@@ -145,41 +128,8 @@ $(document).ready( function () {
             Try moving the portlets around and minimizing them, then reload the page to test restoration-by-cookie.
         </div>
     </div>
-<div class="column" id="col1">
-    <div class="portlet" id="box_feeds">
-        <div class="portlet-header">Feeds</div>
-        <div class="portlet-content">
-            Lorem ipsum dolor sit amet, consectetuer adipiscing elit
-        </div>
-    </div>
-    <div class="portlet" id="box_news">
-        <div class="portlet-header">News</div>
-        <div class="portlet-content">
-            Lorem ipsum dolor sit amet, consectetuer adipiscing elit
-        </div>
-    </div>
-</div>
-<div class="column" id="col2">
-    <div class="portlet" id="box_shopping">
-        <div class="portlet-header">Shopping</div>
-        <div class="portlet-content">
-            Lorem ipsum dolor sit amet, consectetuer adipiscing elit
-        </div>
-    </div>
-</div>
-<div class="column" id="col3">
-    <div class="portlet" id="box_links">
-        <div class="portlet-header">Links</div>
-        <div class="portlet-content">
-            Lorem ipsum dolor sit amet, consectetuer adipiscing elit
-        </div>
-    </div>
-    <div class="portlet" id="box_images">
-        <div class="portlet-header">Images</div>
-        <div class="portlet-content">
-            Lorem ipsum dolor sit amet, consectetuer adipiscing elit
-        </div>
-    </div>
-</div> 
+<div class="column" id="col0"></div>
+<div class="column" id="col1"></div>
+<div class="column" id="col2"></div> 
 </body>
 </html>
