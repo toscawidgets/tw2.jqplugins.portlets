@@ -5,8 +5,8 @@
 <SCRIPT type="text/javascript" src="js/jquery-ui-1.8.2.custom.min.js"></SCRIPT>
 <link type="text/css" href="css/smoothness/jquery-ui-1.8.2.custom.css" rel="Stylesheet" />
 <style type="text/css" media="screen">
-    .column { width: 400px; float: left; padding-bottom: 200px; }
-    .tablecolumn { width: 600px; float: left; padding-bottom: 200px; }
+    /* TODO - derive column width here from number of columns */
+    .column { width: 400px; float: left; padding-bottom: 60px; }
     .portlet { margin: 0 1em 1em 0; }
     .portlet-header {
         font-size:13px; margin: 0.3em;
@@ -16,7 +16,7 @@
     .ui-sortable-placeholder {
         border: 1px dotted black;
         visibility: visible !important;
-        height: 200px !important; }
+        height: 60px !important; }
     .ui-sortable-placeholder * { visibility: hidden; }
 
     body { font: 62.5% "Trebuchet MS", sans-serif; }
@@ -54,9 +54,8 @@ function createPortlet(id, title, content, column) {
         function() {$(this).addClass("ui-icon-hover"); },
         function() {$(this).removeClass('ui-icon-hover'); }
     );
-
-
 }
+
 // function that writes the list order to a cookie
 function saveOrder() {
     $(".column").each(function(index, value){
@@ -109,10 +108,12 @@ $(document).ready( function () {
         connectWith: ['.column'],
         stop: function() { saveOrder(); }
     }); 
+
     var content = "Lorem ipsum dolor sit amet, consectetuer adipiscing elit";
     for (var i=0; i < 7; i++) {
       createPortlet('fooid' + i, 'Portlet number ' + i, content, 'col'+(i%2));
     }
+
     restoreOrder();
 }); 
 
