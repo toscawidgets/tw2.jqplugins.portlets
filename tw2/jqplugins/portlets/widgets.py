@@ -5,6 +5,7 @@ from tw2.core.resources import encoder
 
 # imports from this package
 from tw2.jqplugins.ui import base as uibase
+from tw2.jqplugins.cookies import base as cookiesbase
 from tw2.jqplugins.portlets import base as portletsbase
 import tw2.jqplugins.ui
 
@@ -24,13 +25,23 @@ class Column(uibase.JQueryUIWidget, twc.CompoundWidget):
 class ColumnLayout(uibase.JQueryUIWidget, twc.CompoundWidget):
     template = "mako:tw2.jqplugins.portlets.templates.layout"
     width = twc.Param(attribute=True)
+    cookies = twc.Param('Boolean.  Use cookies to restore/save order?',
+                        default=True)
 
     def prepare(self):
         self.resources.extend([
             portletsbase.jquery_portlets_css,
             portletsbase.jquery_portlets_js,
         ])
+
+        if self.cookies:
+            self.resources.append(cookiesbase.jquery_cookies_js)
+
         super(ColumnLayout, self).prepare()
+
+        if self.cookies:
+            restore = twc.js_function('restoreOrder')()
+            self.add_call(restore)
 
 class Portlet(uibase.JQueryUIWidget):
     template = "mako:tw2.jqplugins.portlets.templates.portlet"
