@@ -43,11 +43,10 @@ class ColumnLayout(uibase.JQueryUIWidget, twc.CompoundWidget):
             restore = twc.js_function('restoreOrder')()
             self.add_call(restore)
 
-class Portlet(uibase.JQueryUIWidget):
+class Portlet(uibase.JQueryUIWidget, twc.CompoundWidget):
     template = "mako:tw2.jqplugins.portlets.templates.portlet"
 
     title = twc.Param("Title of the portlet.  `str`")
-    content = twc.Param("Content of the portlet.  Another widget, or `str`")
 
     def prepare(self):
         self.resources.extend([
