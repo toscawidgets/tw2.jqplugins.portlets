@@ -43,6 +43,7 @@ function createPortlet(id, title, content, column) {
 
 // function that writes the list order to a cookie
 function saveOrder() {
+    if ($.cookie == null) { return; }
     $(".column").each(function(index, value){
         var colid = value.id;
         var cookieName = "cookie-" + colid;
@@ -62,6 +63,7 @@ function saveOrder() {
 
 // function that restores the list order from a cookie
 function restoreOrder() {
+    if ($.cookie == null) { return; }
     $(".column").each(function(index, value) {
         var colid = value.id;
         var cookieName = "cookie-" + colid
@@ -86,7 +88,6 @@ function restoreOrder() {
         }
     });
 } 
-
 
 $(document).ready( function () {
     $(".column").sortable({

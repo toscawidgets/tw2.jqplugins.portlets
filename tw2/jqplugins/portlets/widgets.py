@@ -38,6 +38,11 @@ class Portlet(uibase.JQueryUIWidget, twc.DisplayOnlyWidget):
     title = twc.Param("Title of the portlet.  `str`")
     content = twc.Param("Content of the portlet.  Another widget, or `str`")
 
+    def __init__(self, *args, **kw):
+        super(Portlet, self).__init__(*args, **kw)
+        setupCall = twc.js_function('makeIntoPortlet')('%s'%self.id)
+        self.add_call(setupCall)
+
     def prepare(self):
         self.resources.extend([
             portletsbase.jquery_portlets_css,
