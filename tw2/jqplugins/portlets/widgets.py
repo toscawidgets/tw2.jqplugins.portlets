@@ -10,7 +10,7 @@ import tw2.jqplugins.ui
 
 
 
-class Column(uibase.JQueryUIWidget, twc.DisplayOnlyWidget):
+class Column(uibase.JQueryUIWidget, twc.CompoundWidget):
     template = "mako:tw2.jqplugins.portlets.templates.column"
     width = twc.Param(attribute=True)
 
@@ -21,7 +21,7 @@ class Column(uibase.JQueryUIWidget, twc.DisplayOnlyWidget):
         ])
         super(Column, self).prepare()
 
-class ColumnLayout(uibase.JQueryUIWidget, twc.DisplayOnlyWidget):
+class ColumnLayout(uibase.JQueryUIWidget, twc.CompoundWidget):
     template = "mako:tw2.jqplugins.portlets.templates.layout"
     width = twc.Param(attribute=True)
 
@@ -32,16 +32,11 @@ class ColumnLayout(uibase.JQueryUIWidget, twc.DisplayOnlyWidget):
         ])
         super(ColumnLayout, self).prepare()
 
-class Portlet(uibase.JQueryUIWidget, twc.DisplayOnlyWidget):
+class Portlet(uibase.JQueryUIWidget):
     template = "mako:tw2.jqplugins.portlets.templates.portlet"
 
     title = twc.Param("Title of the portlet.  `str`")
     content = twc.Param("Content of the portlet.  Another widget, or `str`")
-
-    def __init__(self, *args, **kw):
-        super(Portlet, self).__init__(*args, **kw)
-        setupCall = twc.js_function('makeIntoPortlet')('%s'%self.id)
-        self.add_call(setupCall)
 
     def prepare(self):
         self.resources.extend([
@@ -49,4 +44,10 @@ class Portlet(uibase.JQueryUIWidget, twc.DisplayOnlyWidget):
             portletsbase.jquery_portlets_js,
         ])
         super(Portlet, self).prepare()
+
+        # tw2.jqplugins.ui already escapes the selector for us but
+        # twc.js_function escapes it for us EVEN more.  We gotta tone it down.
+        less_escaped_selector = self.selector.replace('\\\\', '\\')
+        setupCall = twc.js_function('makeIntoPortlet')(less_escaped_selector)
+        self.add_call(setupCall)
 
