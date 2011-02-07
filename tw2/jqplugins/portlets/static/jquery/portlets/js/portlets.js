@@ -48,11 +48,12 @@ function saveOrder() {
         var colid = value.id;
         var cookieName = "cookie-" + colid;
         // Get the order for this column.
-        var order = $('#' + colid).sortable("toArray");
+        var order = $('#' + colid.replace(/:/g, '\\:')).sortable("toArray");
         // For each portlet in the column
         for ( var i = 0, n = order.length; i < n; i++ ) {
             // Determine if it is 'opened' or 'closed'
-            var v = $('#' + order[i] ).find('.portlet-content').is(':visible');
+            var v = $('#' + order[i].replace(/:/g, '\\:'))
+                .find('.portlet-content').is(':visible');
             // Modify the array we're saving to indicate what's open and
             //  what's not.
             order[i] = order[i] + ":" + v;
@@ -67,16 +68,15 @@ function restoreOrder() {
     $(".column").each(function(index, value) {
         var colid = value.id;
         var cookieName = "cookie-" + colid
+        colid = colid.replace(/:/g, '\\:');
         var cookie = $.cookie(cookieName);
         if ( cookie == null ) { return; }
         var IDs = cookie.split(",");
+        if ( IDs[0] == '' ) { return; }
         for (var i = 0, n = IDs.length; i < n; i++ ) {
             var toks = IDs[i].split(":");
-            if ( toks.length != 2 ) {
-                continue;
-            }
-            var portletID = toks[0];
-            var visible = toks[1]
+            var portletID = toks.slice(0, toks.length-1).join('\\:');
+            var visible = toks[toks.length-1]
             var portlet = $(".column")
                 .find('#' + portletID)
                 .appendTo($('#' + colid));
