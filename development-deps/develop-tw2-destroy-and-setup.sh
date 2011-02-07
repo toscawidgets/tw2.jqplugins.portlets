@@ -26,6 +26,8 @@ hg clone http://bitbucket.org/toscawidgets/tw2jquery || \
         (pushd tw2jquery && hg pull && popd)
 git clone http://github.com/ralphbean/tw2.jqplugins.ui.git || \
         (pushd tw2.jqplugins.ui && git pull && popd)
+git clone http://github.com/ralphbean/tw2.jqplugins.cookies.git || \
+        (pushd tw2.jqplugins.cookies && git pull && popd)
 #hg clone https://ralphbean@bitbucket.org/toscawidgets/tw2jquery || \
 #        (pushd tw2jquery && hg pull && popd)
 
@@ -34,5 +36,6 @@ pushd tw2forms ; python setup.py install ; popd
 pushd tw2devtools ; python setup.py install ; popd
 pushd tw2jquery ; python setup.py install_lib install_egg_info ; popd
 pushd tw2.jqplugins.ui ; python setup.py install_lib install_egg_info ; popd
+pushd tw2.jqplugins.cookies ; python setup.py install_lib install_egg_info ; popd
 
 popd # $devbase
