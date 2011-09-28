@@ -13,7 +13,7 @@ import tw2.jqplugins.ui
 
 class Column(uibase.JQueryUIWidget, twc.CompoundWidget):
     template = "mako:tw2.jqplugins.portlets.templates.column"
-    width = twc.Param(attribute=True)
+    width = twc.Param(attribute=True, default='100%')
 
     def prepare(self):
         self.resources.extend([
@@ -24,7 +24,7 @@ class Column(uibase.JQueryUIWidget, twc.CompoundWidget):
 
 class ColumnLayout(uibase.JQueryUIWidget, twc.CompoundWidget):
     template = "mako:tw2.jqplugins.portlets.templates.layout"
-    width = twc.Param(attribute=True)
+    width = twc.Param(attribute=True, default='100%')
     cookies = twc.Param('Boolean.  Use cookies to restore/save order?',
                         default=True)
 

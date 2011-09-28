@@ -15,7 +15,7 @@ It was inspired by `this thread <http://groups.google.com/group/jquery-ui/browse
 
 Live Demo
 ---------
-Peep the `live demonstration <http://craftsman.rc.rit.edu/module?module=tw2.jqplugins.portlets>`_.
+Peep the `live demonstration <http://tw2-demos.threebean.org/module?module=tw2.jqplugins.portlets>`_.
 
 Links
 -----
