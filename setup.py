@@ -11,7 +11,7 @@ _extra_mako = ["Mako >= 0.1.1"]
 
 setup(
     name='tw2.jqplugins.portlets',
-    version='2.0.0',
+    version='2.0.1',
     description='toscawidgets2 wrapper for jquery-ui portlets (like google ig)',
     long_description=long_description,
     author='Ralph Bean',
