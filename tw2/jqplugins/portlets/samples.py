@@ -12,10 +12,10 @@ from widgets import Column, ColumnLayout, Portlet
 
 
 class DemoLayout(ColumnLayout):
-    width = '900px'
+    width = '590px'
 
     class col1(Column):
-        width = '300px'
+        width = '290px'
 
         class portlet(Portlet):
             title = "Two widgets in a portlet"
@@ -33,10 +33,7 @@ class DemoLayout(ColumnLayout):
             title = "Another portlet with only one widget"
             widgetry = twf.Label(text='Some content in a label widget')
 
-    class col3(Column):
-        width = '300px'
-
-        class portlet(Portlet):
+        class bigger_portlet(Portlet):
             title = "A portlet with a whole form in it.. whoah."
 
             class Form(twf.TableForm):
