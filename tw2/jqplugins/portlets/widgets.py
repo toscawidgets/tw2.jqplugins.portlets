@@ -10,7 +10,6 @@ from tw2.jqplugins.portlets import base as portletsbase
 import tw2.jqplugins.ui
 
 
-
 class Column(uibase.JQueryUIWidget, twc.CompoundWidget):
     template = "mako:tw2.jqplugins.portlets.templates.column"
     width = twc.Param(attribute=True, default='100%')
@@ -21,6 +20,26 @@ class Column(uibase.JQueryUIWidget, twc.CompoundWidget):
             portletsbase.jquery_portlets_js,
         ])
         super(Column, self).prepare()
+
+
+class Portlet(uibase.JQueryUIWidget, twc.CompoundWidget):
+    template = "mako:tw2.jqplugins.portlets.templates.portlet"
+
+    title = twc.Param("Title of the portlet.  `str`")
+
+    def prepare(self):
+        self.resources.extend([
+            portletsbase.jquery_portlets_css,
+            portletsbase.jquery_portlets_js,
+        ])
+        super(Portlet, self).prepare()
+
+        # tw2.jqplugins.ui already escapes the selector for us but
+        # twc.js_function escapes it for us EVEN more.  We gotta tone it down.
+        less_escaped_selector = self.selector.replace('\\\\', '\\')
+        setupCall = twc.js_function('makeIntoPortlet')(less_escaped_selector)
+        self.add_call(setupCall)
+
 
 class ColumnLayout(uibase.JQueryUIWidget, twc.CompoundWidget):
     template = "mako:tw2.jqplugins.portlets.templates.layout"
@@ -42,22 +61,3 @@ class ColumnLayout(uibase.JQueryUIWidget, twc.CompoundWidget):
         if self.cookies:
             restore = twc.js_function('restoreOrder')()
             self.add_call(restore)
-
-class Portlet(uibase.JQueryUIWidget, twc.CompoundWidget):
-    template = "mako:tw2.jqplugins.portlets.templates.portlet"
-
-    title = twc.Param("Title of the portlet.  `str`")
-
-    def prepare(self):
-        self.resources.extend([
-            portletsbase.jquery_portlets_css,
-            portletsbase.jquery_portlets_js,
-        ])
-        super(Portlet, self).prepare()
-
-        # tw2.jqplugins.ui already escapes the selector for us but
-        # twc.js_function escapes it for us EVEN more.  We gotta tone it down.
-        less_escaped_selector = self.selector.replace('\\\\', '\\')
-        setupCall = twc.js_function('makeIntoPortlet')(less_escaped_selector)
-        self.add_call(setupCall)
-
